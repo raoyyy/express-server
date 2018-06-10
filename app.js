@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 var index = require('./routes/index');
+var questions = require('./routes/questions');
 
 var app = express();
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/questions', questions);
 
 //（添加）创建启动服务器
 http.createServer(app).listen(app.get('port'), function(){
