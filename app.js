@@ -8,6 +8,7 @@ var http = require('http');
 
 var index = require('./routes/index');
 var questions = require('./routes/questions');
+var mistakes = require('./routes/mistakes')
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/questions', questions);
+app.use('/mistakes', mistakes)
 
 //（添加）创建启动服务器
 http.createServer(app).listen(app.get('port'), function(){

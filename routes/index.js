@@ -9,7 +9,7 @@ var {
   addQuestion
 } = dbActions
 
-const workSheetsFromFile = xlsx.parse('/Users/VincentWong/Develop/TestServer/exam-server/excels/myFile.xlsx')
+const workSheetsFromFile = xlsx.parse('/Users/raoyu/Desktop/实习项目/exam/exam-server/excels/myFile.xlsx')
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
@@ -65,16 +65,57 @@ router.get('/', async function(req, res, next) {
       }
       console.log(question)
       console.log('跑到这里',index)
-      var result = await addQuestion(question)
-      return result
+      var result1 = await addQuestion(question)
+      return result1
     })
     console.log(questions_promises)
-    var result = await Promise.all(questions_promises)
-    console.log(result)
-    res.status(200).send({questions:result})
+    var result1 = await Promise.all(questions_promises)
+    // console.log(result)
+    // console.log(typeof result)
+    // res.status(200).send({questions:result})
   }
   // console.log(workSheetsFromFile[1])
   // console.log(workSheetsFromFile[2])
+  if(workSheetsFromFile[1].data.length > 0){
+    // 处理判断题
+    var data1 = workSheetsFromFile[1].data
+    var questions_promises = data1.map(async(x,index)=>{
+      // console.log(index)
+      if (index == 0) return '标题行'
+      // 第一行是标题
+      if (x.length == 0 ) return '该行为空'
+      // 如果一行中没有任何内容则不插入
+      var question = {
+        title: x[1],
+        options: [],
+        answer: x[2],
+        type:"判断题"
+      }
+      for(var i=1;i<3;i++){
+        var item = {}
+        item.title = i%2 == 1?"正确":"错误"
+        item.index = i%2 == 1?"是":"否"
+        if (question.answer.indexOf(item.index) !== -1) {
+          // TODO answer 必须是 String 对象
+          item.isAnswer = true
+          // console.log(`${item.index}是正确答案`)
+        } else {
+          item.isAnswer = false
+        }
+        // console.log(item)
+        question.options.push(item)
+      }
+      console.log("result1: "+result1)
+      var result2 = await addQuestion(question)
+      return result2
+      })
+      var result2 = await Promise.all(questions_promises)
+      var result = result1.concat(result2)
+
+      console.log("result2: "+result2)
+      console.log("result: "+result)
+      res.status(200).send({questions:result})
+  }
 });
 
 module.exports = router;
