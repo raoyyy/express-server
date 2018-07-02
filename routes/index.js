@@ -9,11 +9,12 @@ var {
   addQuestion
 } = dbActions
 
-const workSheetsFromFile = xlsx.parse('/Users/raoyu/Desktop/实习项目/exam/exam-server/excels/myFile.xlsx')
+const workSheetsFromFile = xlsx.parse('/Users/raoyu/Desktop/实习项目/exam/exam-server/upload/myFile.xlsx')
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  if (workSheetsFromFile[0].data.length > 0) {
+  console.log("workSheetsFromFile.data: "+workSheetsFromFile.data)
+    if (workSheetsFromFile[0].data.length > 0) {
     // 处理选择题
     var data = workSheetsFromFile[0].data
     var questions_promises = data.map(async(x,index)=>{
@@ -73,48 +74,54 @@ router.get('/', async function(req, res, next) {
     // console.log(result)
     // console.log(typeof result)
     // res.status(200).send({questions:result})
-  }
+  
   // console.log(workSheetsFromFile[1])
   // console.log(workSheetsFromFile[2])
-  if(workSheetsFromFile[1].data.length > 0){
-    // 处理判断题
-    var data1 = workSheetsFromFile[1].data
-    var questions_promises = data1.map(async(x,index)=>{
-      // console.log(index)
-      if (index == 0) return '标题行'
-      // 第一行是标题
-      if (x.length == 0 ) return '该行为空'
-      // 如果一行中没有任何内容则不插入
-      var question = {
-        title: x[1],
-        options: [],
-        answer: x[2],
-        type:"判断题"
-      }
-      for(var i=1;i<3;i++){
-        var item = {}
-        item.title = i%2 == 1?"正确":"错误"
-        item.index = i%2 == 1?"是":"否"
-        if (question.answer.indexOf(item.index) !== -1) {
-          // TODO answer 必须是 String 对象
-          item.isAnswer = true
-          // console.log(`${item.index}是正确答案`)
-        } else {
-          item.isAnswer = false
+  if(workSheetsFromFile[1]){
+      if(workSheetsFromFile[1].data.length > 0){
+      // 处理判断题
+      var data1 = workSheetsFromFile[1].data
+      var questions_promises = data1.map(async(x,index)=>{
+        // console.log(index)
+        if (index == 0) return '标题行'
+        // 第一行是标题
+        if (x.length == 0 ) return '该行为空'
+        // 如果一行中没有任何内容则不插入
+        var question = {
+          title: x[1],
+          options: [],
+          answer: x[2],
+          type:"判断题"
         }
-        // console.log(item)
-        question.options.push(item)
-      }
-      console.log("result1: "+result1)
-      var result2 = await addQuestion(question)
-      return result2
-      })
-      var result2 = await Promise.all(questions_promises)
-      var result = result1.concat(result2)
+        for(var i=1;i<3;i++){
+          var item = {}
+          item.title = i%2 == 1?"正确":"错误"
+          item.index = i%2 == 1?"是":"否"
+          if (question.answer.indexOf(item.index) !== -1) {
+            // TODO answer 必须是 String 对象
+            item.isAnswer = true
+            // console.log(`${item.index}是正确答案`)
+          } else {
+            item.isAnswer = false
+          }
+          // console.log(item)
+          question.options.push(item)
+        }
+        console.log("result1: "+result1)
+        var result2 = await addQuestion(question)
+        return result2
+        })
+        var result2 = await Promise.all(questions_promises)
+        var result = result1.concat(result2)
 
-      console.log("result2: "+result2)
-      console.log("result: "+result)
-      res.status(200).send({questions:result})
+        console.log("result2: "+result2)
+        console.log("result: "+result)
+        res.status(200).send({questions:result})
+      }
+  }
+}
+  else {
+    res.status(200).send("没有数据")
   }
 });
 

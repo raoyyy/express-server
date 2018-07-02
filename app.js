@@ -9,6 +9,7 @@ var http = require('http');
 var index = require('./routes/index');
 var questions = require('./routes/questions');
 var users = require('./routes/users')
+var upload = require('./routes/upload')
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/questions', questions);
 app.use('/users', users)
+app.use('/upload', upload)
 
 //（添加）创建启动服务器
 http.createServer(app).listen(app.get('port'), function(){
