@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
+var cors = require('cors')
 
 var index = require('./routes/index');
 var questions = require('./routes/questions');
@@ -12,6 +13,7 @@ var users = require('./routes/users')
 var upload = require('./routes/upload')
 
 var app = express();
+app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
