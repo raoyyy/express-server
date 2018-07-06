@@ -31,6 +31,32 @@ var getQuestions = function(){
     })
 };
 
+var getQuestionsList = function(name, page){
+    return new Promise(async (resolve,reject) => {
+        console.log("name:"+name)
+        console.log("page:"+page)
+        if(name) {
+            console.log("有搜索框内容:"+name)
+            var exp = new RegExp(name); 
+            const data = await questions.find({"title":exp}).catch((error) => {
+                reject(new Error("查找 questions 表时发生错误", error))
+            })
+            resolve(data)
+            console.log(data.length)
+        }
+        else{
+            console.log("没有搜索框内容")
+            const data = await questions.find().catch((error) => {
+                reject(new Error("查找 questions 表时发生错误", error))
+            })
+            resolve(data)
+            console.log(data.length)
+        }
+        
+        
+    })
+};
+
 var getMyUserInfo = function(user_id){
     return new Promise(function(resolve,reject){
         //暂时不做权限限制，只要知道 user_id 就可以获取用户数据
@@ -135,5 +161,6 @@ module.exports = {
     getQuestions,
     getMyUserInfo,
     updateMyUserInfo,
-    getMistakes
+    getMistakes,
+    getQuestionsList
 }
