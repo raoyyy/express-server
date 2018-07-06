@@ -4,11 +4,33 @@ var dbActions = require('../utils/dbActions');
 
 var {
     getQuestions,
-    getQuestionsList
+    getQuestionsList,
+    deleteQuestion,
   } = dbActions
 
 router.get('/', async function(req, res, next) {
     var questions = await getQuestions()
+    res.status(200).send({'questions':questions})
+})
+
+router.post('/', async function(req, res, next) {
+    console.log(req.body)
+    var _id = req.body.id
+    // console.log("id:"+_id)
+    var questions = await deleteQuestion(_id)
+    res.status(200).send({'questions':questions})
+    // var questions = await getQuestions()
+    // res.status(200).send({'questions':questions})
+})
+
+router.post('/delBatch', async function(req, res, next) {
+    //传递过来的是数组，封装成promise对象 ，用promise.all
+    console.log(req.body)
+    var _id = req.body.id
+    var id_promise = _id.map(function(id){
+        return deleteQuestion(id)
+    })
+    var questions = await Promise.all(id_promise)
     res.status(200).send({'questions':questions})
 })
 

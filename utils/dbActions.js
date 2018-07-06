@@ -31,6 +31,16 @@ var getQuestions = function(){
     })
 };
 
+var deleteQuestion = function(_id){
+    return new Promise(async (resolve,reject) => {
+        const data = await questions.remove({"_id":_id}).catch((error) => {
+            reject(new Error("删除 questions 表时发生错误", error))
+        })
+        console.log("删除成功")
+        resolve(data)
+    })
+};
+
 var getQuestionsList = function(name, page){
     return new Promise(async (resolve,reject) => {
         console.log("name:"+name)
@@ -162,5 +172,6 @@ module.exports = {
     getMyUserInfo,
     updateMyUserInfo,
     getMistakes,
-    getQuestionsList
+    getQuestionsList,
+    deleteQuestion
 }
