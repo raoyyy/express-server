@@ -6,6 +6,7 @@ var {
     getQuestions,
     getQuestionsList,
     deleteQuestion,
+    editQuestion
   } = dbActions
 
 router.get('/', async function(req, res, next) {
@@ -32,6 +33,20 @@ router.post('/delBatch', async function(req, res, next) {
     })
     var questions = await Promise.all(id_promise)
     res.status(200).send({'questions':questions})
+})
+
+router.post('/edit', async function(req, res, next) {
+    //传递过来的是数组，封装成promise对象 ，用promise.all
+    console.log(req.body.para)
+    var newQuestion = req.body.para
+    var question = await editQuestion(newQuestion)
+    res.status(200).send({'questions':question})
+    // var _id = req.body.id
+    // var id_promise = _id.map(function(id){
+    //     return deleteQuestion(id)
+    // })
+    // var questions = await Promise.all(id_promise)
+    // res.status(200).send({'questions':questions})
 })
 
 //addQuestions

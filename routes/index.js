@@ -9,7 +9,7 @@ var {
   addQuestion
 } = dbActions
 
-const workSheetsFromFile = xlsx.parse('/Users/raoyu/Desktop/实习项目/exam/exam-server/upload/myFile.xlsx')
+const workSheetsFromFile = xlsx.parse('./upload/myFile.xlsx')
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {

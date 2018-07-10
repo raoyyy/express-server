@@ -41,6 +41,74 @@ var deleteQuestion = function(_id){
     })
 };
 
+var editQuestion = function(newQuestion){
+    console.log("newQuestion")
+    console.log(newQuestion)
+    var options = []
+    if(newQuestion.optionA){
+        var obj = {}
+        obj.title = newQuestion.optionA
+        obj.index = "A"
+        if(newQuestion.answer.indexOf(obj.title)!= -1){
+            obj.isAnswer = true
+        } else {
+            obj.isAnswer = false
+        }
+        options.push(obj)
+    }
+    if(newQuestion.optionB){
+        var obj = {}
+        obj.title = newQuestion.optionB
+        obj.index = "B"
+        if(newQuestion.answer.indexOf(obj.title)!= -1){
+            obj.isAnswer = true
+        } else {
+            obj.isAnswer = false
+        }
+        options.push(obj)
+    }
+    if(newQuestion.optionC){
+        var obj = {}
+        obj.title = newQuestion.optionC
+        obj.index = "C"
+        if(newQuestion.answer.indexOf(obj.title)!= -1){
+            obj.isAnswer = true
+        } else {
+            obj.isAnswer = false
+        }
+        options.push(obj)
+    }
+    if(newQuestion.optionD){
+        var obj = {}
+        obj.title = newQuestion.optionD
+        obj.index = "D"
+        if(newQuestion.answer.indexOf(obj.title)!= -1){
+            obj.isAnswer = true
+        } else {
+            obj.isAnswer = false
+        }
+        options.push(obj)
+    }
+    if(newQuestion.optionE){
+        var obj = {}
+        obj.title = newQuestion.optionE
+        obj.index = "E"
+        if(newQuestion.answer.indexOf(obj.title)!= -1){
+            obj.isAnswer = true
+        } else {
+            obj.isAnswer = false
+        }
+        options.push(obj)
+    }
+    return new Promise(async (resolve,reject) => {
+        const data = await questions.update(newQuestion.question_id,{"title":newQuestion.question,"type":newQuestion.type,"options":options,"answer":newQuestion.answer.join()}).catch((error) => {
+            reject(new Error("编辑 questions 表时发生错误", error))
+        })
+        console.log("编辑成功")
+        resolve(data)
+    })
+}
+
 var getQuestionsList = function(name, page){
     return new Promise(async (resolve,reject) => {
         console.log("name:"+name)
@@ -173,5 +241,6 @@ module.exports = {
     updateMyUserInfo,
     getMistakes,
     getQuestionsList,
-    deleteQuestion
+    deleteQuestion,
+    editQuestion
 }
