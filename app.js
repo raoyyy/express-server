@@ -11,6 +11,9 @@ var index = require('./routes/index');
 var questions = require('./routes/questions');
 var users = require('./routes/users')
 var upload = require('./routes/upload')
+var uptoken = require('./routes/uptoken')
+var categories = require('./routes/categories')
+var cases = require('./routes/cases')
 
 var app = express();
 app.use(cors())
@@ -32,6 +35,9 @@ app.use('/', index);
 app.use('/questions', questions);
 app.use('/users', users)
 app.use('/upload', upload)
+app.use('/uptoken', uptoken)
+app.use('/categories', categories)
+app.use('/cases', cases)
 
 //（添加）创建启动服务器
 http.createServer(app).listen(app.get('port'), function(){

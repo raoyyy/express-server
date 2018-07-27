@@ -7,16 +7,16 @@ var uploadExcel = multer({
     dest: 'upload'
 })
 
-var type = uploadExcel.single('thumbnail')
+var type = uploadExcel.single('excelFile')
+console.log(type)
 
 router.post('/',type,async function(req,res,next){
     console.log(req.file)
+    console.log(req.body)
     var tmp_path = req.file.path;
     console.log(tmp_path)
-  /** The original name of the uploaded file
-      stored in the variable "originalname". **/
-  var target_path = 'upload/' + req.file.originalname;
-  console.log(target_path)
+    var target_path = 'upload/' + req.file.originalname;
+    console.log(target_path)
 
   /** A better way to copy the uploaded file. **/
   if (!fs.existsSync('upload/')) {
